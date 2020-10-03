@@ -20,6 +20,7 @@ A development docker for every wordpress project
 - `mkdir project` or `git clone <some_git_repo_url> project` for existing project
 - `docker-compose up -d`
 - `docker-compose exec cli bash`
+- `wp --allow-root config list` for config list
 
 
 ## New wordpress project install
