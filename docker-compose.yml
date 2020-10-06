@@ -57,8 +57,3 @@ services:
       - mariadb
     ports:
       - ${PHPMYADMIN_PORT}:80
-
-  mailcatcher:
-    image: sj26/mailcatcher
-    ports:
-      - ${MAILCATCHER_PORT}:1080
