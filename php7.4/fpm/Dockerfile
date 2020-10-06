@@ -1,6 +1,6 @@
 FROM php:7.4-fpm
 
-MAINTAINER ReadyMadeHost
+LABEL maintainer="ReadyMadeHost http://readymadehost.com"
 
 # Installing required packages
 RUN apt-get update && apt-get upgrade -y
@@ -26,7 +26,18 @@ RUN docker-php-ext-install \
 	opcache \
 	gd
 
+# Installing other extensions but enabled dynamically
+RUN pecl install xdebug
+# RUN docker-php-ext-enable xdebug
+
 # Updating php.ini
 ADD conf/php.ini /usr/local/etc/php/php.ini
 
-CMD ["php-fpm", "-F"]
+ARG PHP_ENABLE_XDEBUG
+ENV PHP_ENABLE_XDEBUG ${PHP_ENABLE_XDEBUG}
+
+# Add scripts
+ADD docker-entrypoint.sh /root/docker-entrypoint.sh
+RUN chmod +x /root/docker-entrypoint.sh
+
+CMD ["/root/docker-entrypoint.sh", "php-fpm", "-F"]

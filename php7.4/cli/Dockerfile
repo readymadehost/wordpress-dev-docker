@@ -1,6 +1,6 @@
 FROM php:7.4-cli
 
-MAINTAINER ReadyMadeHost
+LABEL maintainer="ReadyMadeHost http://readymadehost.com"
 
 # Installing required packages
 RUN apt-get update && apt-get upgrade -y
@@ -33,6 +33,10 @@ RUN docker-php-ext-install \
 	opcache \
 	gd
 
+# Installing other extensions but enabled dynamically
+RUN pecl install xdebug
+# RUN docker-php-ext-enable xdebug
+
 # Updating php.ini
 ADD conf/php.ini /usr/local/etc/php/php.ini
 
@@ -45,8 +49,11 @@ RUN curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli
 RUN chmod +x wp-cli.phar
 RUN mv wp-cli.phar /usr/local/bin/wp
 
+ARG NODE_VERSION
+ENV NODE_VERSION ${NODE_VERSION}
+
 # Installing node
-RUN curl -sL https://deb.nodesource.com/setup_14.x  | bash -
+RUN curl -sL https://deb.nodesource.com/setup_${NODE_VERSION} | bash -
 RUN apt-get -y install nodejs
 
 # Manage project and add scripts
@@ -55,9 +62,13 @@ ADD manage-project-permission.sh /root/manage-project-permission.sh
 RUN chmod +x /root/manage-project-permission.sh
 RUN echo 'alias mpp="/root/manage-project-permission.sh"' >> /root/.bashrc
 RUN /root/manage-project-permission.sh
-ADD docker-entrypoint.sh /root/docker-entrypoint.sh
-RUN chmod +x /root/docker-entrypoint.sh
 ADD setup-new-project.sh /root/setup-new-project.sh
 RUN chmod +x /root/setup-new-project.sh
 
-CMD ["/root/docker-entrypoint.sh"]
+ARG PHP_ENABLE_XDEBUG
+ENV PHP_ENABLE_XDEBUG ${PHP_ENABLE_XDEBUG}
+
+ADD docker-entrypoint.sh /root/docker-entrypoint.sh
+RUN chmod +x /root/docker-entrypoint.sh
+
+CMD ["/root/docker-entrypoint.sh", "bash"]
