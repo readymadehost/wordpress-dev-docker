@@ -5,6 +5,11 @@ services:
     build:
       context: php${PHP_VERSION}/fpm
       args:
+        PHP_ENABLE_REDIS: ${PHP_ENABLE_REDIS}
+        PHP_ENABLE_XDEBUG: ${PHP_ENABLE_XDEBUG}
+    image: readymadehost/wordpress-dev-docker-php${PHP_VERSION}-fpm:${DOCKER_TAG}
+    environment:
+        PHP_ENABLE_REDIS: ${PHP_ENABLE_REDIS}
         PHP_ENABLE_XDEBUG: ${PHP_ENABLE_XDEBUG}
     ports:
       - ${PHP_FPM_PORT}:9000
@@ -12,18 +17,25 @@ services:
       - ./project:/var/www/project
     depends_on:
       - mariadb
+      # - redis
 
   cli:
     build:
       context: php${PHP_VERSION}/cli
       args:
         NODE_VERSION: ${NODE_VERSION}
+        PHP_ENABLE_REDIS: ${PHP_ENABLE_REDIS}
+        PHP_ENABLE_XDEBUG: ${PHP_ENABLE_XDEBUG}
+    image: readymadehost/wordpress-dev-docker-php${PHP_VERSION}-cli:${DOCKER_TAG}
+    environment:
+        PHP_ENABLE_REDIS: ${PHP_ENABLE_REDIS}
         PHP_ENABLE_XDEBUG: ${PHP_ENABLE_XDEBUG}
     working_dir: /var/www/project
     volumes:
       - ./project:/var/www/project
     depends_on:
       - mariadb
+      # - redis
 
   nginx:
     image: nginx:alpine
@@ -57,3 +69,6 @@ services:
       - mariadb
     ports:
       - ${PHPMYADMIN_PORT}:80
+
+  # redis:
+  #   image: redis:alpine

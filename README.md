@@ -6,9 +6,10 @@ A development docker for every wordpress project
 ## Features
 
 - Build for wordpress and has cli tools
-- Bundle of `fpm`, `cli`, `nginx`, `mariadb` and `phpmyadmin` containers
-- Latest php7.4, php7.3, php7.2 and php7.1 supported
-- Latest node14.x, node13.x, node12.x, ... supported
+- Bundle of `fpm`, `cli`, `nginx`, `mariadb`, `phpmyadmin` and `redis` containers
+- PHP 5.5, 5.6, 7.0, 7.1, 7.2, 7.3, 7.4, 8.0 and 8.1 supported
+- Database mariadb 10.x, mongodb 4.x ... supported
+- Node 14.x, 16.x, 17.x, ... supported
 - Included wp, composer and node cli
 - Support for PhpStorm or VSCode + WSL2/docker-desktop setup
 - Support for xdebug included check `.env` file
@@ -65,11 +66,19 @@ Simply add remote docker php cli interpreter, change path mapping and configure 
 With vscode's remote container extension, we can simply connect into cli container.
 
 
-## For development usages
+## Pre build docker image
 
-- Clone this repo and pull on update. ReadyMadeHost cli tool coming soon...
+- `readymadehost/wordpress-dev-docker-php{PHP_VERSION}-cli:latest`
+- `readymadehost/wordpress-dev-docker-php{PHP_VERSION}-fpm:latest`
 
 
-## For production usages
+## Quick Link
 
-- Current docker setup is for development only. Planning for ReadyMadeHost coming soon...
+* Easy installation of PHP extensions in official PHP Docker images
+    - https://github.com/mlocati/docker-php-extension-installer
+
+* MailCatcher
+    - https://github.com/sj26/mailcatcher
+
+* ReadyMadeHost docker hub
+    - https://hub.docker.com/orgs/readymadehost

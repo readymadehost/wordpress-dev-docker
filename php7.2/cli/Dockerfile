@@ -3,51 +3,15 @@ FROM php:7.2-cli
 LABEL maintainer="ReadyMadeHost http://readymadehost.com"
 
 # Installing required packages
-RUN apt-get update && apt-get upgrade -y
-RUN DEBIAN_FRONTEND=noninteractive apt-get install -y \
-	apt-transport-https \
-	libicu-dev \
-    libonig-dev \
-    libzip-dev \
-    libpng-dev \
-    libcurl4-openssl-dev \
-    pkg-config \
-    libssl-dev \
-    git \
-    vim \
-    zip \
-    unzip \
-    wget \
-    screenfetch \
-    mariadb-client
-
-# Installing extensions
-RUN docker-php-ext-install \
-	mysqli \
-	intl \
-	mbstring \
+RUN apt-get update
+RUN apt-get install --no-install-recommends -y procps \
+	curl \
+	git \
+	vim \
 	zip \
-	exif \
-	pcntl \
-	bcmath \
-	opcache \
-	gd
-
-# Installing other extensions but enabled dynamically
-RUN pecl install xdebug
-# RUN docker-php-ext-enable xdebug
-
-# Updating php.ini
-ADD conf/php.ini /usr/local/etc/php/php.ini
-
-# Installing composer
-VOLUME /root/.composer/cache
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
-
-# Installing wordpress cli
-RUN curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
-RUN chmod +x wp-cli.phar
-RUN mv wp-cli.phar /usr/local/bin/wp
+	unzip \
+	wget
+RUN apt-get install --no-install-recommends -y mariadb-client
 
 ARG NODE_VERSION
 ENV NODE_VERSION ${NODE_VERSION}
@@ -56,15 +20,49 @@ ENV NODE_VERSION ${NODE_VERSION}
 RUN curl -sL https://deb.nodesource.com/setup_${NODE_VERSION} | bash -
 RUN apt-get -y install nodejs
 
+# Installing yarn using npm
+RUN npm install --global yarn
+
+# Installing extensions
+RUN curl -L https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions \
+    -o /usr/local/bin/install-php-extensions && chmod +x /usr/local/bin/install-php-extensions
+
+# Installing extensions
+RUN install-php-extensions \
+	pdo_mysql \
+	intl \
+	mbstring \
+	zip \
+	exif \
+	pcntl \
+	bcmath \
+	opcache \
+	gd \
+	imagick \
+	apcu \
+	@composer
+
+# Installing other extensions but enabled dynamically
+RUN IPE_DONT_ENABLE=1 install-php-extensions redis \
+	xdebug
+
+# Updating php.ini
+ADD conf/php.ini /usr/local/etc/php/php.ini
+
+# Installing wordpress cli
+RUN curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
+RUN chmod +x wp-cli.phar
+RUN mv wp-cli.phar /usr/local/bin/wp
+
 # Manage project and add scripts
-RUN mkdir /var/www/project
+RUN mkdir -p /var/www/project
 ADD manage-project-permission.sh /root/manage-project-permission.sh
 RUN chmod +x /root/manage-project-permission.sh
 RUN echo 'alias mpp="/root/manage-project-permission.sh"' >> /root/.bashrc
 RUN /root/manage-project-permission.sh
-ADD setup-new-project.sh /root/setup-new-project.sh
-RUN chmod +x /root/setup-new-project.sh
 
+ARG PHP_ENABLE_REDIS
+ENV PHP_ENABLE_REDIS ${PHP_ENABLE_REDIS}
 ARG PHP_ENABLE_XDEBUG
 ENV PHP_ENABLE_XDEBUG ${PHP_ENABLE_XDEBUG}
 
