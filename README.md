@@ -29,7 +29,7 @@ A development docker for every wordpress project
 
 ## New wordpress project install
 
-- Download zip from offical website and add code inside project dir
+- Download zip from official website and put wp code inside project dir
 - Follow gui wordpress install
 
 
