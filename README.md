@@ -29,9 +29,8 @@ A development docker for every wordpress project
 
 ## New wordpress project install
 
-- `docker-compose exec cli /root/setup-new-project.sh` from outside container
-- or `/root/setup-new-project.sh` from inside container
-- Follow the regular web wordpress install steps via project url
+- Download zip from offical website and add code inside project dir
+- Follow gui wordpress install
 
 
 ## Notes
