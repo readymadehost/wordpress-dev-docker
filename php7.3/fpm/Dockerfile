@@ -32,8 +32,8 @@ RUN install-php-extensions \
 	@composer
 
 # Installing other extensions but enabled dynamically
-RUN REDIS_DONT_ENABLE=0 install-php-extensions redis
-RUN XDEBUG_DONT_ENABLE=0 install-php-extensions xdebug
+RUN IPE_DONT_ENABLE=1 install-php-extensions redis \
+	xdebug
 
 # Updating php.ini
 ADD conf/php.ini /usr/local/etc/php/php.ini
