@@ -26,6 +26,7 @@ RUN curl -L https://github.com/mlocati/docker-php-extension-installer/releases/l
 
 # Installing extensions
 RUN install-php-extensions \
+	mysqli \
 	pdo_mysql \
 	intl \
 	mbstring \
