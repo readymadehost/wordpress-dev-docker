@@ -7,9 +7,9 @@ A development docker for every wordpress project
 
 - Build for wordpress and has cli tools
 - Bundle of `fpm`, `cli`, `nginx`, `mariadb`, `phpmyadmin` and `redis` containers
-- PHP 5.5, 5.6, 7.0, 7.1, 7.2, 7.3, 7.4, 8.0 and 8.1 supported
-- Database mariadb 10.x, mongodb 4.x ... supported
-- Node 14.x, 16.x, 17.x, 18.x, ... supported
+- PHP 8.4, 8.3, 8.2, 8.1, 8.0, 7.4, 7.3, 7.2, 7.1, 7.0, 5.6 and 5.5 supported
+- Database mariadb 12.x, mariadb 11.x, mariadb 10.x, mongodb 4.x ... supported
+- Node 22.x, 20.x, 18.x, 17.x, 16.x, ... supported
 - Included wp, composer and node cli
 - Support for PhpStorm or VSCode + WSL2/docker-desktop setup
 - Support for xdebug included check `.env` file
